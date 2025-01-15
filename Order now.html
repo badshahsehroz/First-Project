@@ -12,54 +12,53 @@
       <!--Order Now Section-->
   <main class="order-now-section">
     <h2>Order Your Coffee</h2>
+<form action="http://localhost:3000/submit-order" method="POST" class="order-form">
+  <label for="coffee-type">Choose your coffee:</label>
+  <select id="coffee-type" name="coffeeType" required>
+    <option value="">Select a coffee...</option>
+    <option value="espresso">Espresso</option>
+    <option value="latte">Latte</option>
+    <option value="cappuccino">Cappuccino</option>
+    <option value="americano">Americano</option>
+    <option value="mocha">Mocha</option>
+  </select>
+  
+  <label for="coffee-quantity">Quantity:</label>
+  <input type="number" id="coffee-quantity" name="quantity" min="1" value="" required />
 
-    <form class="order-form">
-      <label for="coffee-type">Choose your coffee:</label>
-      <select id="coffee-type" name="coffee-type" required>
-        <option value="">Select a coffee...</option>
-        <option value="espresso">Espresso</option>
-        <option value="latte">Latte</option>
-        <option value="cappuccino">Cappuccino</option>
-        <option value="americano">Americano</option>
-        <option value="mocha">Mocha</option>
-      </select>
-      <label for="coffee-quantity">Quantity:</label>
-      <input type="number" id="coffee-quantity" name="quantity" min="1" value="" required>
+  <label for="meal-type">Choose your meal:</label>
+  <select id="meal-type" name="mealType">
+    <option value="">Select a meal...</option>
+    <option value="Burger">Burger</option>
+    <option value="Special Roll">Special Roll</option>
+    <option value="Sandwich">Sandwich</option>
+    <option value="French Fries">French Fries</option>
+  </select>
 
-        <label for="meal-type">Choose your meal:</label>
-        <select id="meal-type" name="meal-type">
-          <option value="">Select a meal...</option>
-          <option value="Burger">Burger</option>
-          <option value="Special Roll">Special Roll</option>
-          <option value="Sandwich">Sandwich</option>
-          <option value="French Fries">French Fries</option>
-        </select>
-        <label for="meal-quantity">Quantity:</label>
-      <input type="number" id="meal-quantity" name="meal-quantity" min="1" value="" required>
+  <label for="meal-quantity">Meal Quantity:</label>
+  <input type="number" id="meal-quantity" name="mealQuantity" min="1" value="" />
 
-      <label for="size">Select size:</label>
-      <select id="size" name="size" required>
-        <option value="">Choose size...</option>
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-      </select>
-     
+  <label for="size">Select size:</label>
+  <select id="size" name="size" required>
+    <option value="">Choose size...</option>
+    <option value="small">Small</option>
+    <option value="medium">Medium</option>
+    <option value="large">Large</option>
+  </select>
 
-      <label for="extras">Add-extra:</label>
-      <div class="extras">
-        <input type="checkbox" id="milk" name="extras" value="milk">
-        <label for="milk">Extra Milk</label>
-        <input type="checkbox" id="syrup" name="extras" value="syrup">
-        <label for="syrup">Vanilla Syrup</label>
-        <input type="checkbox" id="whipped-cream" name="extras" value="whipped-cream">
-        <label for="whipped-cream">Whipped Cream</label>
-      </div>
+  <label for="extras">Add extras:</label>
+  <div class="extras">
+    <input type="checkbox" id="milk" name="extras" value="milk" />
+    <label for="milk">Extra Milk</label>
+    <input type="checkbox" id="syrup" name="extras" value="syrup" />
+    <label for="syrup">Vanilla Syrup</label>
+    <input type="checkbox" id="whipped-cream" name="extras" value="whipped-cream" />
+    <label for="whipped-cream">Whipped Cream</label>
+  </div>
 
-      
+  <button type="submit" id="order-button">Order Now</button>
+</form>
 
-      <button type="submit" id="order-button">Order Now</button>
-    </form>
   </main>
   <!--Footer Section-->
   <footer class="footer-section">

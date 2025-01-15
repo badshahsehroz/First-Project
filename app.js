@@ -1,76 +1,92 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const path = require("path");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-// Initialize Express app
 const app = express();
 const port = 3000;
 
+// Define schemas and models
+const Contact = mongoose.model(
+ 'Contact',
+ new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String,
+ })
+);
+
+const Order = mongoose.model(
+ 'Order',
+ new mongoose.Schema({
+  coffeeType: String,
+  quantity: Number,
+  mealType: String,
+  mealQuantity: Number,
+  size: String,
+  extras: [String], // Array to handle multiple extras
+ })
+);
+
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
-// Set up EJS
-app.set("view engine", "ejs");
-
-// MongoDB connection
+// Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/coffeehouse")
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.log("Error connecting to MongoDB", err);
-  });
+ .connect(
+  'mongodb+srv://fawad7998:fawad7998@cluster0.dnad4.mongodb.net/ContactData?retryWrites=true&w=majority'
+ )
+ .then(() => console.log('Connected to MongoDB'))
+ .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-// Import models
-const Order = require("./order");
-const Contact = require("./contact");
+// Contact form route
+app.post('/submit-contact', async (req, res) => {
+ try {
+  const {name, email, message} = req.body;
 
-// Routes
-app.get("/", (req, res) => {
-  res.render("index");
+  if (!name || !email || !message) {
+   return res.status(400).send('All fields are required.');
+  }
+
+  const newContact = new Contact({name, email, message});
+  await newContact.save();
+
+  res.send("Thank you for your message! We'll get back to you soon.");
+ } catch (err) {
+  console.error('Error saving contact:', err);
+  res.status(500).send('An error occurred while submitting your message.');
+ }
 });
 
-app.get("/ordernow", (req, res) => {
-  res.render("ordernow");
-});
+// Order form route
+app.post('/submit-order', async (req, res) => {
+ try {
+  const {coffeeType, quantity, mealType, mealQuantity, size, extras} = req.body;
 
-app.get("/contactus", (req, res) => {
-  res.render("contactus");
-});
-
-app.post("/submit-order", async (req, res) => {
-  const { coffeeType, coffeeQuantity, mealType, mealQuantity, size, extras } =
-    req.body;
+  if (!coffeeType || !quantity || !size) {
+   return res.status(400).send('Coffee type, quantity, and size are required.');
+  }
 
   const newOrder = new Order({
-    coffeeType,
-    coffeeQuantity,
-    mealType,
-    mealQuantity,
-    size,
-    extras,
+   coffeeType,
+   quantity,
+   mealType: mealType || null, // Optional field
+   mealQuantity: mealQuantity || null, // Optional field
+   size,
+   extras: extras || [], // Default to an empty array if no extras
   });
 
   await newOrder.save();
-  res.redirect("/");
+
+  res.send('Your order has been placed successfully!');
+ } catch (err) {
+  console.error('Error saving order:', err);
+  res.status(500).send('An error occurred while placing your order.');
+ }
 });
 
-app.post("/submit-contact", async (req, res) => {
-  const { name, email, message } = req.body;
-
-  const newContact = new Contact({
-    name,
-    email,
-    message,
-  });
-
-  await newContact.save();
-  res.redirect("/");
-});
-
+// Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+ console.log(`Server is running on http://localhost:${port}`);
 });
