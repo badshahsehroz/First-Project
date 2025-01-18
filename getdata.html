@@ -28,10 +28,63 @@
         contacts.forEach(contact => {
           const listItem = document.createElement('li');
           listItem.textContent = `Name: ${contact.name}, Email: ${contact.email}, Message: ${contact.message}`;
+
+          // Delete button
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.style.marginLeft = '10px';
+          deleteButton.onclick = async () => {
+            try {
+              await fetch(`http://localhost:3000/delete-contact/${contact._id}`, { method: 'DELETE' });
+              listItem.remove();
+              alert('Contact deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting contact:', error);
+              alert('Failed to delete contact.');
+            }
+          };
+
+          // Update button
+          const updateButton = document.createElement('button');
+          updateButton.textContent = 'Update';
+          updateButton.style.marginLeft = '10px';
+          updateButton.onclick = () => {
+            const newName = prompt('Enter new name:', contact.name);
+            const newEmail = prompt('Enter new email:', contact.email);
+            const newMessage = prompt('Enter new message:', contact.message);
+
+            if (newName && newEmail && newMessage) {
+              updateContact(contact._id, newName, newEmail, newMessage, listItem);
+            }
+          };
+
+          listItem.appendChild(deleteButton);
+          listItem.appendChild(updateButton);
           contactList.appendChild(listItem);
         });
       } catch (error) {
         console.error('Error fetching contact data:', error);
+      }
+    }
+
+    // Update contact
+    async function updateContact(id, name, email, message, listItem) {
+      try {
+        const response = await fetch(`http://localhost:3000/update-contact/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
+
+        if (response.ok) {
+          listItem.textContent = `Name: ${name}, Email: ${email}, Message: ${message}`;
+          alert('Contact updated successfully!');
+        } else {
+          alert('Failed to update contact.');
+        }
+      } catch (error) {
+        console.error('Error updating contact:', error);
+        alert('Failed to update contact.');
       }
     }
 
@@ -45,10 +98,63 @@
         orders.forEach(order => {
           const listItem = document.createElement('li');
           listItem.textContent = `Coffee Type: ${order.coffeeType}, Quantity: ${order.quantity}, Meal Type: ${order.mealType}, Meal Quantity: ${order.mealQuantity}, Size: ${order.size}, Extras: ${order.extras.join(', ')}`;
+
+          // Delete button
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.style.marginLeft = '10px';
+          deleteButton.onclick = async () => {
+            try {
+              await fetch(`http://localhost:3000/delete-order/${order._id}`, { method: 'DELETE' });
+              listItem.remove();
+              alert('Order deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting order:', error);
+              alert('Failed to delete order.');
+            }
+          };
+
+          // Update button
+          const updateButton = document.createElement('button');
+          updateButton.textContent = 'Update';
+          updateButton.style.marginLeft = '10px';
+          updateButton.onclick = () => {
+            const newCoffeeType = prompt('Enter new coffee type:', order.coffeeType);
+            const newQuantity = prompt('Enter new quantity:', order.quantity);
+            const newSize = prompt('Enter new size:', order.size);
+
+            if (newCoffeeType && newQuantity && newSize) {
+              updateOrder(order._id, newCoffeeType, newQuantity, newSize, listItem);
+            }
+          };
+
+          listItem.appendChild(deleteButton);
+          listItem.appendChild(updateButton);
           orderList.appendChild(listItem);
         });
       } catch (error) {
         console.error('Error fetching order data:', error);
+      }
+    }
+
+    // Update order
+    async function updateOrder(id, coffeeType, quantity, size, listItem) {
+      try {
+        const response = await fetch(`http://localhost:3000/update-order/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ coffeeType, quantity, size })
+        });
+
+        if (response.ok) {
+          listItem.textContent = `Coffee Type: ${coffeeType}, Quantity: ${quantity}, Size: ${size}`;
+          alert('Order updated successfully!');
+        } else {
+          alert('Failed to update order.');
+        }
+      } catch (error) {
+        console.error('Error updating order:', error);
+        alert('Failed to update order.');
       }
     }
 

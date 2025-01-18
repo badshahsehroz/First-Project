@@ -91,6 +91,7 @@ app.get('/get-contacts', async (req, res) => {
  }
 });
 
+
 app.get('/get-orders', async (req, res) => {
  try {
   const orders = await Order.find();
@@ -100,6 +101,65 @@ app.get('/get-orders', async (req, res) => {
   res.status(500).send('An error occurred while fetching orders.');
  }
 });
+
+app.delete('/delete-contact/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Contact.findByIdAndDelete(id);
+    res.send('Contact deleted successfully!');
+  } catch (err) {
+    console.error('Error deleting contact:', err);
+    res.status(500).send('An error occurred while deleting the contact.');
+  }
+});
+
+app.delete('/delete-order/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Order.findByIdAndDelete(id);
+    res.send('Order deleted successfully!');
+  } catch (err) {
+    console.error('Error deleting order:', err);
+    res.status(500).send('An error occurred while deleting the order.');
+  }
+});
+
+// Update contact by ID
+app.put('/update-contact/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, message } = req.body;
+    const updatedContact = await Contact.findByIdAndUpdate(id, { name, email, message }, { new: true });
+
+    if (!updatedContact) {
+      return res.status(404).send('Contact not found.');
+    }
+
+    res.send('Contact updated successfully!');
+  } catch (err) {
+    console.error('Error updating contact:', err);
+    res.status(500).send('An error occurred while updating the contact.');
+  }
+});
+
+// Update order by ID
+app.put('/update-order/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { coffeeType, quantity, size } = req.body;
+    const updatedOrder = await Order.findByIdAndUpdate(id, { coffeeType, quantity, size }, { new: true });
+
+    if (!updatedOrder) {
+      return res.status(404).send('Order not found.');
+    }
+
+    res.send('Order updated successfully!');
+  } catch (err) {
+    console.error('Error updating order:', err);
+    res.status(500).send('An error occurred while updating the order.');
+  }
+});
+
 
 app.listen(port, () => {
  console.log(`Server is running on http://localhost:${port}`);

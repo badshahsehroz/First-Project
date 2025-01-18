@@ -1,37 +1,102 @@
-body {
-  font-family: Arial, sans-serif;
+/* Resetting default margin and padding */
+* {
   margin: 0;
   padding: 0;
-  background-color: #f5f5f5;
+  box-sizing: border-box;
 }
 
+/* Body styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+  margin: 20px;
+}
+
+/* Container styling */
 .container {
   display: flex;
   justify-content: space-between;
-  margin: 20px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
+/* Common styles for data sections */
 .contacts, .orders {
-  width: 45%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1 1 calc(50% - 20px);
+  max-width: calc(50% - 20px);
 }
 
-h2 {
-  text-align: center;
-  color: #333333;
-  margin-bottom: 20px;
+.contacts h2, .orders h2 {
+  margin-bottom: 15px;
+  color: #4CAF50;
+  font-size: 1.8em;
+  border-bottom: 2px solid #4CAF50;
+  display: inline-block;
+  padding-bottom: 5px;
 }
 
+/* Styling lists */
 ul {
-  list-style-type: disc;
-  padding-left: 20px;
+  list-style: none;
 }
 
 li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
   margin-bottom: 10px;
-  color: #555555;
-  font-size: 16px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+li span {
+  font-weight: bold;
+}
+
+/* Button styling */
+button {
+  padding: 8px 12px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:first-of-type {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+button:first-of-type:hover {
+  background-color: #e60000;
+}
+
+button:last-of-type {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+button:last-of-type:hover {
+  background-color: #388E3C;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .contacts, .orders {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
