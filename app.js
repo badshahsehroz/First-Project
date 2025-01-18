@@ -5,7 +5,6 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 
-// Define schemas and models
 const Contact = mongoose.model(
  'Contact',
  new mongoose.Schema({
@@ -23,16 +22,14 @@ const Order = mongoose.model(
   mealType: String,
   mealQuantity: Number,
   size: String,
-  extras: [String], // Array to handle multiple extras
+  extras: [String],
  })
 );
 
-// Middleware
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-// Connect to MongoDB
 mongoose
  .connect(
   'mongodb+srv://fawad7998:fawad7998@cluster0.dnad4.mongodb.net/ContactData?retryWrites=true&w=majority'
@@ -40,7 +37,6 @@ mongoose
  .then(() => console.log('Connected to MongoDB'))
  .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-// Contact form route
 app.post('/submit-contact', async (req, res) => {
  try {
   const {name, email, message} = req.body;
@@ -59,7 +55,6 @@ app.post('/submit-contact', async (req, res) => {
  }
 });
 
-// Order form route
 app.post('/submit-order', async (req, res) => {
  try {
   const {coffeeType, quantity, mealType, mealQuantity, size, extras} = req.body;
@@ -71,10 +66,10 @@ app.post('/submit-order', async (req, res) => {
   const newOrder = new Order({
    coffeeType,
    quantity,
-   mealType: mealType || null, // Optional field
-   mealQuantity: mealQuantity || null, // Optional field
+   mealType: mealType || null,
+   mealQuantity: mealQuantity || null,
    size,
-   extras: extras || [], // Default to an empty array if no extras
+   extras: extras || [],
   });
 
   await newOrder.save();
@@ -86,7 +81,26 @@ app.post('/submit-order', async (req, res) => {
  }
 });
 
-// Start the server
+app.get('/get-contacts', async (req, res) => {
+ try {
+  const contacts = await Contact.find();
+  res.json(contacts);
+ } catch (err) {
+  console.error('Error fetching contacts:', err);
+  res.status(500).send('An error occurred while fetching contacts.');
+ }
+});
+
+app.get('/get-orders', async (req, res) => {
+ try {
+  const orders = await Order.find();
+  res.json(orders);
+ } catch (err) {
+  console.error('Error fetching orders:', err);
+  res.status(500).send('An error occurred while fetching orders.');
+ }
+});
+
 app.listen(port, () => {
  console.log(`Server is running on http://localhost:${port}`);
 });
